@@ -1,0 +1,27 @@
+kind = "mobile"
+previewPath = "/"
+title = "AgriMatch"
+version = "1.0.0"
+id = "artifacts/agrimatch"
+router = "expo-domain"
+
+[[integratedSkills]]
+name = "expo"
+version = "1.0.0"
+
+[[services]]
+ensurePreviewReachable = "/status"
+name = "expo"
+paths = [ "/" ]
+localPort = 23056
+
+[services.development]
+run = "pnpm --filter @workspace/agrimatch run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/agrimatch", "run", "build" ]
+run = [ "pnpm", "--filter", "@workspace/agrimatch", "run", "serve" ]
+
+[services.env]
+PORT = "23056"
+BASE_PATH = "/"

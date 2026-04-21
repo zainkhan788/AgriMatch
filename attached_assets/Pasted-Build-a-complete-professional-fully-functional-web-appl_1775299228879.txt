@@ -1,0 +1,732 @@
+Build a complete, professional, fully functional web application called "AgriMatch" 
+for a Final Year Project. This is a smart agriculture platform that collects soil 
+and crop data from across the country via crowdsourcing and internet sources, then 
+uses matching algorithms and deep learning to recommend the most suitable crops for 
+specific soil types, detect pests, and maximize farmer income and harvest yield.
+
+============================================================
+TECH STACK
+============================================================
+- Frontend: HTML5, CSS3, Vanilla JavaScript (no frameworks)
+- Charts: Chart.js (CDN)
+- Icons: Font Awesome 6 (CDN)
+- Fonts: Google Fonts — "Poppins" for headings, "Inter" for body text
+- Maps: Leaflet.js (CDN) for Pakistan agricultural zone map
+- Backend simulation: localStorage for demo data persistence
+- No backend required — use hardcoded JSON datasets for demo
+
+============================================================
+COLOR PALETTE — USE EXACTLY THESE COLORS
+============================================================
+--primary:        #1B4332   (deep forest green — main brand color)
+--primary-dark:   #0D2818   (darkest green — headers, navbar)
+--primary-mid:    #2D6A4F   (forest green — buttons, accents)
+--primary-light:  #52B788   (medium green — highlights, icons)
+--primary-pale:   #95D5B2   (mint green — backgrounds, badges)
+--primary-ghost:  #D8F3DC   (ghost green — card backgrounds)
+--soil-dark:      #3E1F00   (dark soil brown — soil indicators)
+--soil-mid:       #7A4B2A   (medium brown — soil elements)
+--soil-light:     #C8956C   (sandy brown — soil accents)
+--soil-pale:      #F5E6D3   (cream — light soil backgrounds)
+--white:          #FFFFFF
+--off-white:      #F8FAF8
+--text-dark:      #1A1A2E
+--text-mid:       #4A4A6A
+--text-light:     #8A8AAA
+--success:        #52B788
+--warning:        #F4A261
+--danger:         #E63946
+--gold:           #D4A017
+
+============================================================
+GLOBAL STYLES
+============================================================
+- All corners: border-radius 12px for cards, 8px for buttons, 
+  24px for pills/badges
+- Box shadows: 0 4px 24px rgba(27,67,50,0.10) for cards
+- Transitions: all 0.3s ease on all interactive elements
+- Hover effects: translateY(-4px) + deeper shadow on all cards
+- Active nav items: left border 3px solid --primary-light
+- Smooth scroll behavior on html element
+- Custom scrollbar: 6px width, --primary-mid thumb, --primary-ghost track
+- All buttons: font-weight 600, letter-spacing 0.5px, uppercase for 
+  primary CTAs
+- Section headings: Poppins 700, with a small 3px underline accent 
+  in --primary-light, 40px below heading before content
+- Background of entire app: --off-white
+- All form inputs: border 1.5px solid --primary-pale, focus border 
+  --primary-mid with 0 0 0 3px rgba(82,183,136,0.15) glow
+- Navbar height: 70px fixed top, backdrop-filter blur(12px), 
+  background rgba(13,40,24,0.97)
+
+============================================================
+LAYOUT STRUCTURE
+============================================================
+Build a Single Page Application with smooth scroll navigation.
+All sections are on one page. Navbar links scroll to sections.
+The app has these main sections in order:
+
+1. NAVBAR
+2. HERO SECTION
+3. HOW IT WORKS
+4. SOIL ANALYZER TOOL
+5. CROP MATCHER TOOL
+6. PEST DETECTION SECTION
+7. PAKISTAN AGRICULTURAL MAP
+8. LIVE STATISTICS DASHBOARD
+9. CROWDSOURCE DATA SUBMISSION FORM
+10. CROP DATABASE GALLERY
+11. INCOME CALCULATOR TOOL
+12. FOOTER
+
+============================================================
+SECTION 1 — NAVBAR (Fixed Top)
+============================================================
+- Background: rgba(13,40,24,0.97) with blur
+- Left: Logo — a small SVG wheat icon in #52B788 beside text 
+  "Agri" in white bold + "Match" in #52B788 bold, font size 22px
+- Right: Navigation links — Home, How It Works, Soil Analyzer, 
+  Crop Matcher, Pest Detection, Live Stats, Submit Data, 
+  Income Calculator — all in white, 14px, font-weight 500
+- Far right: A green CTA button "Get Started" with white text, 
+  background #52B788, hover background #2D6A4F
+- Mobile: hamburger menu icon that opens a full-screen overlay 
+  menu with the same links stacked vertically on --primary-dark background
+- Active section highlighting: as user scrolls, the corresponding 
+  nav link gets --primary-light color and underline
+- Add a thin 1px progress bar at very top of navbar in #52B788 
+  that fills as user scrolls down the page
+
+============================================================
+SECTION 2 — HERO SECTION
+============================================================
+- Full viewport height (100vh)
+- Background: deep gradient from #0D2818 at top to #1B4332 at bottom
+- Decorative background: an SVG pattern of very faint wheat stalks 
+  and soil cross-section lines tiled across the background at 5% opacity
+- Left side (60% width):
+  - Small badge at top: pill shape, background #2D6A4F, text 
+    "🌾 FYP Project 2024 — BSCS" in #95D5B2, font size 12px
+  - Main heading: "Match Your Soil to the Right Crop" in Poppins 
+    700, font-size 58px, white, line-height 1.15, with the word 
+    "Right Crop" highlighted in a curved underline SVG stroke in #52B788
+  - Subheading paragraph: "AgriMatch uses AI and crowdsourced data 
+    to analyze soil types across Pakistan and recommend the most 
+    profitable crops — increasing farmer income and harvest yield 
+    through precision agriculture intelligence." in Inter 400, 18px, 
+    #95D5B2, max-width 540px, line-height 1.7
+  - Two CTA buttons side by side: 
+    Primary — "Analyze Your Soil" background #52B788 white text 
+    16px, padding 14px 32px, hover scale(1.03)
+    Secondary — "View Crop Database" border 2px solid #52B788, 
+    text #52B788, same size, hover background #52B788 white text
+  - Below buttons: three small trust indicators in a row — 
+    "🌍 All Pakistan Data" · "🤖 AI-Powered Matching" · 
+    "📊 Realtime Analytics" — each in #95D5B2 13px with a 
+    small dot separator
+- Right side (40% width):
+  - An animated floating dashboard card mockup showing:
+    - Top bar: "Soil Analysis Result" in white bold
+    - A donut chart (CSS only, no JS needed) showing soil 
+      composition: Loam 45% green, Clay 30% brown, Sand 25% sandy
+    - Below chart: "Best Match: Wheat 🌾" in large green text
+    - A compatibility score bar showing "94% Match" with a 
+      filled green progress bar
+    - Three small stat pills: "Yield: High" "pH: 6.8" "Income: ++++"
+  - Card has: background rgba(255,255,255,0.07), backdrop-filter 
+    blur(20px), border 1px solid rgba(82,183,136,0.2), 
+    border-radius 20px, padding 28px
+  - Card floats with CSS animation: keyframes float — 
+    translateY(0) to translateY(-12px) to translateY(0), 4s infinite ease-in-out
+- Bottom of hero: a down-scroll arrow bouncing animation in white 
+  at center bottom
+
+============================================================
+SECTION 3 — HOW IT WORKS
+============================================================
+- Background: white #FFFFFF
+- Section badge: "Simple 4-Step Process" in green pill
+- Section title: "How AgriMatch Works" Poppins 700 40px dark
+- Four large step cards in a horizontal row (CSS grid, 4 columns):
+
+  Step 1 — "Submit Soil Data"
+  Large icon: a soil/layers icon in green circle background
+  Description: Farmers or researchers submit soil sample data 
+  including type, pH level, moisture, and location across Pakistan.
+  Bottom: small tag "Crowdsourced Data"
+
+  Step 2 — "AI Soil Classification"  
+  Large icon: a brain/circuit icon
+  Description: Our deep learning model classifies the soil type 
+  and analyzes its composition for agricultural compatibility.
+  Bottom: small tag "Deep Learning"
+
+  Step 3 — "Crop Match Algorithm"
+  Large icon: a connecting nodes icon
+  Description: The matching engine compares classified soil 
+  parameters against crop requirement databases to find optimal matches.
+  Bottom: small tag "Smart Matching"
+
+  Step 4 — "Maximize Your Yield"
+  Large icon: a rising chart icon
+  Description: Receive personalized crop recommendations with 
+  projected income estimates and best farming practices.
+  Bottom: small tag "Income Optimization"
+
+- Between each step card, a small right-pointing animated arrow 
+  (CSS pulse animation) in --primary-light color
+- Cards: white background, border 1.5px solid --primary-ghost, 
+  hover lift effect, step number in top-right corner of each card 
+  in very large 80px Poppins 700 text at 5% opacity in green 
+  (as a decorative background number)
+
+============================================================
+SECTION 4 — SOIL ANALYZER TOOL
+============================================================
+- Background: --primary-ghost (#D8F3DC) very light green
+- Section title: "Soil Type Analyzer"
+- Two-column layout:
+
+LEFT COLUMN — Input Form:
+  - Form card with white background, shadow, padding 32px
+  - Form title: "Enter Your Soil Parameters"
+  - Input fields (all styled professionally):
+    1. Location in Pakistan (dropdown select): All 4 provinces 
+       + major agricultural districts — Punjab, Sindh, KPK, 
+       Balochistan, plus major cities (Lahore, Multan, Faisalabad, 
+       Hyderabad, Peshawar, Quetta, etc.)
+    2. Soil Color (dropdown): Dark Brown, Medium Brown, 
+       Reddish Brown, Sandy/Light, Greyish, Black Cotton
+    3. Soil Texture (dropdown): Sandy, Loamy, Clay, 
+       Silt Loam, Sandy Loam, Clay Loam
+    4. pH Level (range slider 4.0 to 9.0, step 0.1): 
+       Show current value dynamically. Below slider show 
+       color coded scale: red for acidic, green for neutral, 
+       blue for alkaline
+    5. Moisture Level (range slider 0 to 100%): 
+       Show percentage dynamically
+    6. Organic Matter % (range slider 0 to 10%)
+    7. Nitrogen Level (radio buttons): Low / Medium / High
+    8. Field Area in Acres (number input)
+  - Large "Analyze Soil" button: full width, background #1B4332, 
+    white text, 16px, 52px height, hover #2D6A4F
+  - Below button: small text "Analysis powered by AgriMatch AI Engine"
+
+RIGHT COLUMN — Results Panel:
+  - Initially shows a placeholder state: a dashed border card 
+    with a soil icon and text "Fill in soil parameters and click 
+    Analyze to see your personalized crop recommendations"
+  - After clicking Analyze button (JavaScript simulation):
+    The results panel animates in showing:
+    
+    TOP: Soil Classification Result card
+    - Large soil type name: e.g. "LOAMY SOIL" in Poppins 700 28px green
+    - A small horizontal soil cross-section diagram (CSS only): 
+      three colored bars stacked showing the soil layer composition 
+      with percentage labels
+    - Four small metric badges in a 2x2 grid: 
+      pH Value, Moisture %, Organic %, Fertility Rating (stars)
+
+    MIDDLE: Top 3 Crop Recommendations
+    - Heading "Recommended Crops" with a green underline
+    - Three crop cards in a row, each showing:
+      Rank badge (1st, 2nd, 3rd) in gold/silver/bronze colors
+      Crop name in bold (e.g. Wheat, Rice, Sugarcane)
+      A large relevant emoji as the crop icon
+      Compatibility percentage bar filled in green
+      Projected yield per acre
+      Estimated income per acre in PKR
+      Small "Learn More" link
+    - The #1 card has a gold star badge "BEST MATCH" in top corner
+
+    BOTTOM: Soil Health Score
+    - A circular progress ring (CSS/SVG) showing overall 
+      soil health score out of 100
+    - Color coded: red < 40, yellow 40-70, green > 70
+    - Below: "Improvement Tips" expandable accordion with 
+      3 farming tips relevant to the soil type
+
+- Use JavaScript to handle the form submit, read the input values, 
+  and show hardcoded result sets based on soil texture selection. 
+  Map each texture to a predefined result object with soil name, 
+  recommended crops array, and health score. Animate results 
+  appearing with fadeIn + slideUp CSS animation.
+
+============================================================
+SECTION 5 — CROP MATCHER TOOL
+============================================================
+- Background: white
+- Section title: "Crop Compatibility Matcher"
+- Subtitle: "Select a crop to see which soil types across 
+  Pakistan are best suited for its cultivation"
+- A horizontal scrollable row of large crop selection cards 
+  (min-width 160px each, scroll with mouse or touch):
+  Wheat 🌾 · Rice 🌾 · Cotton · Sugarcane · Maize 🌽 · 
+  Mango 🥭 · Dates 🌴 · Citrus 🍋 · Potato 🥔 · 
+  Onion · Tomato 🍅 · Mustard · Sunflower · Soybean · Chickpea
+  Each card: white bg, border, crop emoji large 48px, crop name 
+  below, hover state fills background with --primary-ghost, 
+  click state adds active border in --primary-mid
+
+- When a crop card is clicked, below it animates in a detailed 
+  result panel with two columns:
+  
+  LEFT — Soil Requirements Card:
+  - "Ideal Soil Profile for [Crop Name]" heading
+  - A styled table showing:
+    Soil Type | Compatibility | pH Range | Region
+    With each row showing a colored compatibility badge 
+    (green for high, yellow for medium, red for low)
+  - A bar chart (Chart.js horizontal bar) showing top 5 
+    best soil types for this crop with match percentage bars
+
+  RIGHT — Pakistan Cultivation Map Preview:
+  - A simplified flat SVG map of Pakistan showing provinces 
+    colored by crop cultivation intensity for selected crop:
+    Deep green for high cultivation, light green for medium, 
+    tan/brown for low/none
+  - A small legend below the map
+  - Province name + cultivation area in acres as tooltip on hover
+  - Below map: "Top 3 Producing Districts" list with small badges
+
+- Use JavaScript click handlers to swap content when different 
+  crops are selected. Predefine data objects for each crop.
+
+============================================================
+SECTION 6 — PEST DETECTION SECTION
+============================================================
+- Background: very dark #0D2818 (dark green) — this section 
+  stands out as a dark section between light ones
+- Section badge: white pill "Deep Learning Feature"
+- Section title: "AI Pest Detection & Classification" in white
+- Subtitle in #95D5B2: "Upload an image of your crop or leaf 
+  and our deep learning model identifies pests and agricultural 
+  diseases common across Pakistan"
+
+- Two column layout:
+
+  LEFT — Upload Interface:
+  - Large drag-and-drop upload zone: 
+    dashed border 2px dashed #52B788, border-radius 16px, 
+    background rgba(82,183,136,0.05), min-height 280px
+    Center content: upload cloud icon in #52B788, "Drag & Drop 
+    crop image here" in white, "or" in grey, "Browse Image" 
+    button in green outline
+  - Below upload zone: "Sample Images" row showing 5 small 
+    clickable thumbnail placeholders of common Pakistan crop 
+    pest images (use placeholder.com images in green tones)
+  - When an image is selected or sample is clicked, show the 
+    image preview inside the upload zone with a thin green border
+  - "Detect Pests" button: full width, background #52B788, 
+    white text bold, with a small loading spinner that appears 
+    when clicked (CSS spinner animation for 2 seconds, then 
+    show results)
+
+  RIGHT — Detection Results Panel:
+  - Initially: placeholder with pest illustration icon and 
+    "Upload a crop image to detect pests and diseases" text
+  - After detection simulation (JavaScript setTimeout 2000ms):
+    
+    TOP: Detected Issue card:
+    - Confidence badge "87% Confidence" in green
+    - Detected pest/disease name: e.g. "Aphid Infestation" 
+      in large bold white text
+    - Category: "Sucking Pest" in a colored badge
+    - Affected crop zone: "Punjab — Wheat Belt" with map pin icon
+    
+    MIDDLE: Impact Assessment
+    - Three stat cards in a row (dark cards with green accent):
+      Severity: "Medium-High" with orange color indicator
+      Crop Loss Risk: "15-30%" with a small risk bar
+      Affected Area: "Regional" with icon
+    
+    BOTTOM: Treatment Recommendations
+    - Numbered list of 3 recommended treatments with icons:
+      1. Chemical control recommendation
+      2. Biological control option  
+      3. Prevention measures
+    - Each as a styled card with a small expand arrow
+    
+  - Hardcode 5 different pest detection result objects. 
+    Randomly show one each time Detect is clicked.
+  - Results animate in with CSS fadeIn animation.
+
+============================================================
+SECTION 7 — PAKISTAN AGRICULTURAL MAP
+============================================================
+- Background: --off-white
+- Section title: "Agricultural Zones Across Pakistan"
+- Subtitle: "Explore soil types and dominant crops across all 
+  regions and districts of Pakistan"
+- Initialize a Leaflet.js map (use CDN) centered on Pakistan 
+  coordinates [30.3753, 69.3451], zoom level 5
+- Map tiles: use OpenStreetMap tiles
+- Map container: full width, height 520px, border-radius 16px, 
+  overflow hidden, box-shadow
+- On the map, add marker clusters for these locations with 
+  custom green markers (CSS styled divIcon):
+  
+  Punjab region markers (green markers):
+  - Lahore: Soil: Loam · Crops: Wheat, Rice, Sugarcane
+  - Faisalabad: Soil: Sandy Loam · Crops: Cotton, Wheat
+  - Multan: Soil: Clay Loam · Crops: Cotton, Mango, Wheat
+  - Gujranwala: Soil: Silty Loam · Crops: Rice, Wheat
+  - Sialkot: Soil: Alluvial · Crops: Rice, Wheat, Maize
+  
+  Sindh region markers (brown markers):
+  - Hyderabad: Soil: Alluvial Clay · Crops: Cotton, Rice
+  - Sukkur: Soil: Sandy · Crops: Wheat, Cotton, Dates
+  - Larkana: Soil: Silty Clay · Crops: Rice, Cotton
+  - Nawabshah: Soil: Heavy Clay · Crops: Sugarcane, Cotton
+  
+  KPK markers (lighter green):
+  - Peshawar: Soil: Loamy · Crops: Wheat, Maize, Tobacco
+  - Mardan: Soil: Clay Loam · Crops: Sugarcane, Wheat, Tobacco
+  - Swat: Soil: Sandy Loam · Crops: Apple, Potato, Rice
+  
+  Balochistan markers (sandy/brown):
+  - Quetta: Soil: Rocky Loam · Crops: Apple, Apricot, Almond
+  - Turbat: Soil: Sandy · Crops: Dates, Banana, Henna
+  - Khuzdar: Soil: Clay Loam · Crops: Wheat, Fruits
+
+- Each marker popup when clicked shows a styled popup card:
+  Location name in bold green
+  Soil Type with colored badge
+  Top 3 Crops with small crop emojis
+  Compatibility Score as a small progress bar
+  "View Full Analysis" button
+
+- Above the map, a filter bar with pill buttons:
+  "All Zones" · "Punjab" · "Sindh" · "KPK" · "Balochistan"
+  Clicking filters show/hide markers by region
+
+- Below the map, 4 province summary stat cards in a row:
+  Each showing province name, total agricultural land in acres, 
+  dominant soil type, top crop, and a small colored badge
+
+============================================================
+SECTION 8 — LIVE STATISTICS DASHBOARD
+============================================================
+- Background: #1B4332 dark green — another dark section
+- Section title: "Platform Statistics" in white
+- Subtitle: "Real-time agricultural data from across Pakistan" 
+  in #95D5B2
+
+- TOP ROW — 4 large animated counter stat cards (dark cards):
+  1. "48,291" — Total Soil Samples Submitted
+     Icon: soil layers icon in green
+     Sub: "+124 this week" in mint
+  2. "23" — Crop Types in Database
+     Icon: wheat/crop icon
+     Sub: "Across all growing zones"
+  3. "4 Provinces" — Regions Covered
+     Icon: map pin icon
+     Sub: "All agricultural zones"
+  4. "PKR 2.4B" — Projected Income Increase
+     Icon: rupee/money icon in gold
+     Sub: "For matched farmers"
+  
+  Each card: background rgba(255,255,255,0.06), border 1px solid 
+  rgba(82,183,136,0.2), border-radius 16px, padding 28px
+  Numbers animate counting up from 0 when section scrolls into 
+  view using Intersection Observer API + JavaScript counter animation
+
+- MIDDLE ROW — Two charts side by side:
+  
+  LEFT Chart: "Soil Type Distribution Across Pakistan"
+  Chart.js Doughnut/Pie chart showing:
+  Loam 38%, Clay 22%, Sandy 18%, Silt 12%, Clay Loam 10%
+  Colors: greens and browns from palette
+  Chart container: dark card background, white title, 
+  legend below with colored dots
+
+  RIGHT Chart: "Top 10 Crops by Agricultural Suitability Score"
+  Chart.js Horizontal Bar Chart:
+  Wheat 94% · Rice 89% · Cotton 85% · Sugarcane 82% · 
+  Maize 78% · Mango 75% · Citrus 72% · Potato 68% · 
+  Chickpea 65% · Mustard 62%
+  Bars in gradient greens from dark to light
+  White text labels, dark card background
+
+- BOTTOM ROW: "Recent Data Submissions" live feed table
+  A scrolling table showing recent crowdsourced submissions:
+  Columns: Location | Soil Type | Submitted Crop | Match Score | Time
+  5-7 rows of realistic Pakistani data
+  Alternating row colors: very dark green and slightly lighter
+  White text, green badges for match scores
+  Table has a "View All Records" button at bottom right
+
+============================================================
+SECTION 9 — CROWDSOURCE DATA SUBMISSION
+============================================================
+- Background: white
+- Section title: "Contribute Your Agricultural Data"
+- Subtitle: "Help build Pakistan's largest soil and crop 
+  database by submitting data from your farm or research"
+- Two column layout:
+
+  LEFT — Benefits panel:
+  - A styled card in --primary-ghost background listing 
+    why to contribute:
+    Each benefit as a row with a green checkmark icon:
+    ✓ Help farmers across Pakistan make better decisions
+    ✓ Contribute to national agricultural research
+    ✓ Get free crop recommendations in return
+    ✓ Your data stays anonymous and secure
+    ✓ Earn AgriMatch Contributor badge
+  - Below: three contributor type badges in a row:
+    "Farmer" "Researcher" "Agriculture Officer" 
+    as pill badges in different green shades
+  - A small "Why Crowdsourcing?" expandable section
+
+  RIGHT — Submission Form:
+  - Form card with shadow, white bg, padding 32px
+  - Form title: "Submit Field Data" with a small "Required *" note
+  
+  Fields:
+  1. Full Name (text input)
+  2. Profession (dropdown): Farmer / Researcher / Agronomist / 
+     Agriculture Officer / Student / Other
+  3. Province (dropdown): Punjab / Sindh / KPK / Balochistan
+  4. District (text input)
+  5. GPS Location (text input with a small "Use My Location" 
+     button beside it that fills with placeholder coords)
+  6. Field Area in Acres (number)
+  7. Soil Type Observed (dropdown): all types
+  8. Soil pH if Known (number, optional)
+  9. Current Crop Being Grown (dropdown): all crops
+  10. Crop Yield Last Season in tons/acre (number)
+  11. Annual Income from This Field in PKR (number)
+  12. Pest Issues Observed (multi-select checkboxes):
+      Aphids / Whitefly / Stem Borer / Locust / Fungal Disease / 
+      Bacterial Wilt / None
+  13. Upload Field Photo (file input, styled)
+  14. Additional Notes (textarea, 4 rows)
+  
+  Submit button: "Submit Agricultural Data" full width, 
+  background #1B4332, white, 52px height
+  
+  On submit (JavaScript): validate required fields showing 
+  inline error messages in red below each invalid field.
+  On success: hide form and show animated success card with 
+  green checkmark animation, "Thank You! Your data has been 
+  submitted successfully. You've earned the AgriMatch 
+  Contributor Badge!" and a green badge icon.
+
+============================================================
+SECTION 10 — CROP DATABASE GALLERY
+============================================================
+- Background: --primary-ghost very light green
+- Section title: "Complete Crop Database"
+- Search bar at top: full width input "Search crops, soil 
+  types, or regions..." with a green search icon inside the 
+  input on the right
+- Filter row below search: pill filter buttons for categories:
+  "All" · "Cereals" · "Cash Crops" · "Fruits" · 
+  "Vegetables" · "Pulses" · "Oilseeds"
+- Grid of crop cards (CSS Grid, 4 columns desktop, 2 tablet, 
+  1 mobile, gap 20px):
+
+Each crop card contains (white background, hover lift shadow):
+- Top colored banner (16px height) in crop category color:
+  Cereals: dark green, Cash crops: gold, Fruits: orange, 
+  Vegetables: medium green, Pulses: brown, Oilseeds: sandy
+- Large crop emoji centered, 52px
+- Crop name: Poppins 600 18px dark
+- Category badge: small colored pill
+- Key info grid (2x2 mini stats):
+  Best Soil | Ideal pH | Season | Yield/Acre
+- Three soil compatibility bars:
+  Top Soil matches with colored bars (green high, yellow medium)
+- Province availability: small flag-style icons for 
+  Punjab/Sindh/KPK/Balochistan that are highlighted/faded 
+  based on whether crop grows there
+- Bottom: "View Full Profile" button in green outline, 
+  hover fills green
+
+Include these crops with accurate Pakistan farming data:
+Wheat, Rice, Cotton, Sugarcane, Maize, Chickpea, Lentils,
+Mung Bean, Potato, Onion, Tomato, Chili, Mango, Citrus,
+Dates, Apple, Apricot, Banana, Mustard, Sunflower, Soybean,
+Tobacco, Barley, Sorghum (at least 20 cards)
+
+- JavaScript: implement the search filter that hides/shows 
+  cards in real-time as user types. Implement category filter 
+  pills that filter by data-category attribute. Smooth card 
+  hide/show with CSS opacity and transform animation.
+
+============================================================
+SECTION 11 — INCOME CALCULATOR TOOL
+============================================================
+- Background: white
+- Section title: "Agricultural Income Calculator"
+- Subtitle: "Estimate your potential earnings by matching 
+  the right crop to your soil type"
+- One centered card, max-width 800px, white bg, shadow, 
+  border-radius 20px, padding 48px
+
+Inside the card:
+- Card heading: "Calculate Your Crop Income Potential"
+- Two column form layout:
+
+  LEFT inputs:
+  1. Your Province (dropdown)
+  2. Soil Type (dropdown)
+  3. Field Area in Acres (number input, default 5)
+  4. Available Water Source (dropdown): 
+     Canal / Tubewell / Rainfall / Mixed
+  5. Farming Method (dropdown): 
+     Traditional / Semi-Modern / Modern Mechanized
+
+  RIGHT inputs:
+  6. Selected Crop (dropdown — all crops)
+  7. Seed Quality (radio): Certified / Local / Hybrid
+  8. Fertilizer Use (dropdown): None / Basic / Recommended / Heavy
+  9. Pest Control (dropdown): None / Basic / Advanced
+  10. Investment Budget PKR (number input)
+
+- "Calculate Income" button: centered, large, background #1B4332 
+  white text, 200px wide, hover #2D6A4F
+
+- Results area below the button (hidden initially, animate in):
+  Four result cards in a row:
+  
+  Card 1: "Estimated Yield"
+  Large number: e.g. "18.5 Tons" in dark green Poppins 700 32px
+  Sub: "Based on your soil-crop match score"
+  
+  Card 2: "Gross Revenue"  
+  Large number: "PKR 185,000" in gold color
+  Sub: "At current market rates"
+  
+  Card 3: "Net Income"
+  Large number: "PKR 124,500" in green
+  Sub: "After estimated input costs"
+  
+  Card 4: "Match Score"
+  Large number: "87%" in green
+  Sub: "Soil-crop compatibility rating"
+  
+  Below the 4 cards:
+  A styled recommendation message box: green background, white 
+  text — "Based on your inputs, [Crop Name] is a STRONG match 
+  for your soil. With proper water management, you could expect 
+  [X]% higher income compared to average farmers in your region."
+  
+  A line chart (Chart.js): "5-Year Income Projection" showing 
+  income growth over 5 seasons with the matched crop vs 
+  non-matched crop as two lines (green vs grey)
+  
+  "Download Report" button in green outline that shows 
+  an alert "Report generation coming soon!"
+
+- JavaScript: when Calculate is clicked, validate inputs, 
+  then compute simulated results based on form selections 
+  using a lookup table of predefined yield and price data 
+  per crop. Animate numbers counting up to final value.
+
+============================================================
+SECTION 12 — FOOTER
+============================================================
+- Background: #0D2818 deepest dark green
+- Four column layout:
+
+  Column 1 — Brand:
+  - Logo (wheat icon + AgriMatch text) in white
+  - Description: "Pakistan's first AI-powered soil and crop 
+    matching platform. Helping farmers maximize yield and 
+    income through precision agriculture intelligence."
+  - Social icons row (Font Awesome): GitHub, LinkedIn, Email — 
+    all in #52B788, hover white
+
+  Column 2 — Quick Links:
+  - Heading "Platform" in #52B788
+  - Links: Soil Analyzer · Crop Matcher · Pest Detection · 
+    Income Calculator · Crop Database · Submit Data
+  - All links in #95D5B2, hover white, no underline by default
+
+  Column 3 — Resources:
+  - Heading "Resources" in #52B788
+  - Links: Pakistan Agriculture Data · Soil Classification Guide · 
+    Crop Calendar Pakistan · Pest Library · Research Papers
+
+  Column 4 — FYP Info:
+  - Heading "About Project" in #52B788
+  - University name placeholder: "Department of Computer Science"
+  - Session: "Final Year Project 2024-25"
+  - Project Supervisor: "FYP Supervisor"
+  - Team Members: list 3-4 team member name placeholders
+  - All in #95D5B2 13px
+
+- Bottom bar: thin line separator in rgba(255,255,255,0.1) 
+  then centered text: "© 2024 AgriMatch. Final Year Project — 
+  All Rights Reserved." in #52B788 small caps
+- A "Back to Top" floating button: fixed bottom-right, 
+  background #52B788, white arrow icon, 48px circle, 
+  appears only after scrolling 300px, smooth scroll to top
+
+============================================================
+ADDITIONAL PROFESSIONAL FEATURES TO IMPLEMENT
+============================================================
+1. LOADING SCREEN: On page load, show a full-screen loader 
+   in #1B4332 background with the AgriMatch logo animating 
+   in (CSS scale + fade), a growing progress bar in #52B788, 
+   then fade out after 2 seconds revealing the main page
+
+2. SCROLL ANIMATIONS: Use Intersection Observer API to add 
+   class "visible" to all section elements as they enter 
+   viewport. CSS: .animate { opacity: 0; transform: 
+   translateY(30px); transition: 0.6s ease; } 
+   .animate.visible { opacity: 1; transform: translateY(0); }
+   Stagger child elements with increasing animation-delay
+
+3. MOBILE RESPONSIVE: Full mobile responsiveness with these 
+   breakpoints: 1200px (desktop), 768px (tablet), 480px (mobile)
+   All grids collapse to single column on mobile. 
+   Navbar collapses to hamburger. Touch-friendly tap targets 
+   minimum 44px. Horizontal scroll sections use overflow-x scroll.
+
+4. NOTIFICATION TOAST: A small toast notification system 
+   in bottom-right corner. Show green success toasts when 
+   forms are submitted. Show info toasts for important tips.
+   Toast: white card, green left border, fade in/out, 
+   auto dismiss after 3 seconds.
+
+5. DARK MODE TOGGLE: A small toggle switch in the navbar 
+   (moon icon). When toggled, switch CSS variables to a 
+   dark theme version keeping the green palette but with 
+   dark backgrounds everywhere. Save preference to localStorage.
+
+6. TOOLTIP SYSTEM: Add data-tooltip attributes to technical 
+   terms throughout the app. On hover show a small dark 
+   tooltip above the element with a brief explanation.
+
+7. PRELOADER ANIMATIONS: Each chart animates in from zero 
+   on first scroll into view using Chart.js animation 
+   options (duration: 1500, easing: easeInOutQuart)
+
+============================================================
+IMPORTANT IMPLEMENTATION NOTES
+============================================================
+- All data is hardcoded JavaScript objects/arrays — no API calls
+- The app must work completely offline in a browser
+- Do NOT use any CSS frameworks like Bootstrap or Tailwind — 
+  write all CSS from scratch using custom properties
+- Do NOT use any JS frameworks like React or Vue — 
+  pure vanilla JavaScript only
+- All images: use CSS-generated patterns, emoji, SVG icons, 
+  or placeholder.com URLs with green color filters
+- File structure: single HTML file with embedded CSS in 
+  <style> tag and JavaScript in <script> tag at bottom
+- Comments: add clear section comments in both CSS and JS
+- Code must be clean, well-organized, and production-quality
+- Minimum viable: every section must be fully styled and 
+  interactive even if data is simulated
+- Performance: lazy load chart.js only when needed section 
+  is scrolled to
+- Accessibility: all form inputs have proper labels, 
+  all interactive elements have focus states, 
+  semantic HTML5 tags throughout (header, nav, main, 
+  section, article, footer)
+- The entire app should feel like a polished, investor-ready 
+  product demo, not a student project

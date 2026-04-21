@@ -1,0 +1,46 @@
+{
+  "expo": {
+    "name": "AgriMatch",
+    "slug": "Agrimatch",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "Agrimatch",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/images/Agrimatch-logo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#1B4332"
+    },
+    "ios": {
+      "supportsTablet": false
+    },
+    "android": {
+      "backgroundColor": "#1B4332"
+    },
+    "web": {},
+    "plugins": [
+      [
+        "expo-router",
+        {
+          "origin": "https://replit.com/"
+        }
+      ],
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/Agrimatch-logo.png",
+          "resizeMode": "contain",
+          "backgroundColor": "#1B4332",
+          "imageWidth": 180
+        }
+      ],
+      "expo-font",
+      "expo-web-browser"
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    }
+  }
+}

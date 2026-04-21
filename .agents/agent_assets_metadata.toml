@@ -1,0 +1,8 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "I3zqmBBRpC8r3s-THq6ay"
+uri = "file://artifacts/agrimatch/assets/images/icon.png"
+type = "image"
+title = "agrimatch app icon"
