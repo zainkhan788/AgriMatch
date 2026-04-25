@@ -4,19 +4,25 @@
     "slug": "Agrimatch",
     "version": "1.0.0",
     "orientation": "portrait",
+    "icon": "./assets/images/Agrimatch-logo.png",
     "scheme": "Agrimatch",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
       "image": "./assets/images/Agrimatch-logo.png",
       "resizeMode": "contain",
-      "backgroundColor": "#1B4332"
+      "backgroundColor": "#FFFFFF"
     },
     "ios": {
       "supportsTablet": false
     },
     "android": {
-      "backgroundColor": "#1B4332"
+      "backgroundColor": "#FFFFFF",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/Agrimatch-logo.png",
+        "backgroundColor": "#FFFFFF"
+      },
+      "package": "com.zainkhan788.Agrimatch"
     },
     "web": {},
     "plugins": [
@@ -31,8 +37,8 @@
         {
           "image": "./assets/images/Agrimatch-logo.png",
           "resizeMode": "contain",
-          "backgroundColor": "#1B4332",
-          "imageWidth": 180
+          "backgroundColor": "#FFFFFF",
+          "imageWidth": 350
         }
       ],
       "expo-font",
@@ -41,6 +47,11 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "6a0cd046-56a8-4132-8b00-ac77c10db2b2"
+      }
     }
   }
 }

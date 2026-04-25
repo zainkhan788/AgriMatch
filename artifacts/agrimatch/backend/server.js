@@ -8,11 +8,11 @@ app.use(cors());
 app.use(express.json());
 
 const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "skippers12",
-  database: "agrimatch",
-  port: 3306,
+  host: process.env.MYSQLHOST || "mysql.railway.internal",
+  user: process.env.MYSQLUSER || "root",
+  password: process.env.MYSQLPASSWORD || "vFrhVoQRBXgxzfTjxOsgxESqzwCxSpmV",
+  database: process.env.MYSQLDATABASE || "railway",
+  port: process.env.MYSQLPORT || 3306,
 });
 
 db.connect((err) => {
@@ -49,12 +49,12 @@ app.post("/analyze", (req, res) => {
       s.n_min,
       s.p_min,
       s.k_min,
-      s.Temp_Min,
-      s.Temp_Max,
-      s.Humidity_Min,
-      s.Humidity_Max,
-      s.Rain_Min,
-      s.Rain_Max,
+      s.temp_min,
+      s.temp_max,
+      s.humidity_min,
+      s.humidity_max,
+      s.rain_min,
+      s.rain_max,
       p.yield_maund,
       p.price,
       p.cost,

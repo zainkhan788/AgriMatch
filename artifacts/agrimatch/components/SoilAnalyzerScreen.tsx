@@ -41,7 +41,7 @@ type ResultItem = {
 };
 
 export default function SoilAnalyzerScreen() {
-  const BASE_URL = "http://192.168.1.106:5000";
+  const BASE_URL = "https://agrimatch-backend-production.up.railway.app";
 
   const [locations, setLocations] = useState<LocationItem[]>([]);
   const [soilTypes, setSoilTypes] = useState<SoilTypeItem[]>([]);

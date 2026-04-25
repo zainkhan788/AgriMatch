@@ -34,7 +34,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (session) setUser(JSON.parse(session));
       } catch {}
       const elapsed = Date.now() - start;
-      const minLoadingMs = 1500;
+      const minLoadingMs = 400;
       if (elapsed < minLoadingMs) {
         await new Promise(resolve => setTimeout(resolve, minLoadingMs - elapsed));
       }

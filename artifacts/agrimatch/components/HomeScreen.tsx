@@ -21,7 +21,7 @@ export default function HomeScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
 
-  const topPad = Platform.OS === "web" ? 52 : Math.max(insets.top - 25, 8);
+  const topPad = Platform.OS === "web" ? 52 : Platform.OS === "ios" ? 0 : 30;
   const bottomPad = Platform.OS === "web" ? 34 : insets.bottom;
 
   const quickActions = [
@@ -119,7 +119,7 @@ function makeStyles(colors: ReturnType<typeof useColors>) {
   return StyleSheet.create({
     container: { flex: 1, backgroundColor: colors.background },
     content: { paddingHorizontal: 20 },
-    logoSection: { alignItems: "center", justifyContent: "center", paddingTop: 2, marginBottom: 16 },
+    logoSection: { alignItems: "center", justifyContent: "center", marginTop: 8, marginBottom: 16 },
     logoImage: { width: 220, height: 110 },
     welcomeText: { marginTop: 4, fontSize: 24, fontWeight: "700", color: colors.primary, fontFamily: "Inter_700Bold", textAlign: "center" },
     badge: { backgroundColor: colors.primaryGhost, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20, marginTop: 6 },
