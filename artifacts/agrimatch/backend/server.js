@@ -20,6 +20,25 @@ db.connect()
   .then(() => console.log("PostgreSQL Connected ✅"))
   .catch((err) => console.log("DB Error:", err));
 
+app.get("/provinces", async (req, res) => {
+  try {
+    const result = await db.query(`
+      SELECT zone_id, zone_name
+      FROM zones
+      ORDER BY zone_name ASC
+    `);
+
+    return res.json(result.rows);
+  } catch (err) {
+    console.error("Provinces Error:", err);
+
+    return res.status(500).json({
+      message: "Failed to fetch provinces",
+      error: err.message,
+    });
+  }
+});
+
 app.get("/locations", async (req, res) => {
   try {
     const result = await db.query(
