@@ -52,12 +52,6 @@ export default function HomeScreen() {
     tab: "pest",
     color: colors.danger,
   },
-  {
-    label: t("incomeCalc"),
-    icon: "trending-up" as const,
-    tab: "more",
-    color: colors.gold,
-  },
 ];
 
   const styles = makeStyles(colors);
