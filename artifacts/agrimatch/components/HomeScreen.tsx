@@ -35,7 +35,7 @@ export default function HomeScreen() {
 
   const quickActions = [
   {
-    label: t("soilAnalyzer"),
+    label: t("croprecommendation"),
     icon: "layers" as const,
     tab: "soil",
     color: colors.primaryMid,

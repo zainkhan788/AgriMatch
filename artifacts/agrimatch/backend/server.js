@@ -51,6 +51,31 @@ app.get("/locations", async (req, res) => {
   }
 });
 
+app.get("/locations/:provinceId", async (req, res) => {
+  const { provinceId } = req.params;
+
+  try {
+    const result = await db.query(
+      `
+      SELECT sub_zone_id, sub_zone_name
+      FROM sub_zones
+      WHERE zone_id = $1
+      ORDER BY sub_zone_name ASC
+      `,
+      [provinceId]
+    );
+
+    return res.json(result.rows);
+  } catch (err) {
+    console.error("Province Locations Error:", err);
+
+    return res.status(500).json({
+      message: "Failed to fetch province locations",
+      error: err.message,
+    });
+  }
+});
+
 app.get("/soiltypes", async (req, res) => {
   try {
     const result = await db.query(

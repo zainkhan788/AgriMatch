@@ -11,13 +11,21 @@ import {
  Platform,
  TouchableWithoutFeedback,
  Keyboard,
- RefreshControl
+ RefreshControl,
+ Modal,
+ Image,
 } from "react-native";
+import { CROP_ICONS } from "@/constants/cropIcons";
 import { CROPS_DATABASE } from "@/constants/data";
 import { Feather } from "@expo/vector-icons";
 import "../i18n";
 import { useTranslation } from "react-i18next";
 import colors from "@/constants/colors";
+
+type ProvinceItem = {
+  zone_id: number;
+  zone_name: string;
+};
 
 type LocationItem = {
   sub_zone_name: string;
@@ -50,6 +58,8 @@ type InsightItemProps = {
   description: string;
   isUrdu: boolean;
 };
+
+
 
 const InsightItem = ({
   title,
@@ -86,6 +96,22 @@ export default function SoilAnalyzerScreen() {
 
   const BASE_URL = "https://agrimatch-backend-9sx8.onrender.com";
 
+  const [provinces, setProvinces] = useState<ProvinceItem[]>([]);
+  const [province, setProvince] = useState("");
+  const [provinceModalVisible, setProvinceModalVisible] = useState(true);
+  const [provinceDismissed, setProvinceDismissed] = useState(false);
+  const checkProvince = () => {
+    if (!province || provinceDismissed) {
+      Keyboard.dismiss();
+      setProvinceModalVisible(true);
+      setProvinceDismissed(false);
+      return false;
+    }
+  
+    return true;
+  };
+
+
   const [locations, setLocations] = useState<LocationItem[]>([]);
   const [soilTypes, setSoilTypes] = useState<SoilTypeItem[]>([]);
 
@@ -97,29 +123,60 @@ export default function SoilAnalyzerScreen() {
   const [result, setResult] = useState<ResultItem[]>([]);
   const [refreshing, setRefreshing] = useState(false);
 
-  const getCropEmoji = (cropName: string) => {
+  const getCropIcon = (cropName: string) => {
   const found = CROPS_DATABASE.find(
     (crop) =>
       crop.name.trim().toLowerCase() ===
       cropName.trim().toLowerCase()
   );
 
-  return found ? found.emoji : "🌱";
+  return found?.icon ?? null;
 };
 
-  const scrollRef = useRef<ScrollView>(null);
+const scrollRef = useRef<ScrollView>(null);
 
   useEffect(() => {
-    fetch(`${BASE_URL}/locations`)
-      .then((res) => res.json())
-      .then((data) => setLocations(data))
-      .catch((err) => console.log(err));
+  fetch(`${BASE_URL}/provinces`)
+    .then((res) => res.json())
+    .then((data) => {
+      setProvinces(data);
+      setProvinceModalVisible(true);
+    })
+    .catch((err) => console.log(err));
 
-    fetch(`${BASE_URL}/soiltypes`)
-      .then((res) => res.json())
-      .then((data) => setSoilTypes(data))
-      .catch((err) => console.log(err));
-  }, []);
+  fetch(`${BASE_URL}/soiltypes`)
+    .then((res) => res.json())
+    .then((data) => setSoilTypes(data))
+    .catch((err) => console.log(err));
+
+}, []);
+
+const selectProvince = (item: ProvinceItem) => {
+  setProvinceDismissed(false);
+  setProvince(item.zone_name);
+  console.log("Province Selected:", item);
+
+  setProvince(item.zone_name);
+
+  setLocation("");
+  setSoilType("");
+  setResult([]);
+  setLocations([]);
+  fetch(`${BASE_URL}/locations/${item.zone_id}`)
+    .then((res) => res.json())
+    .then((data) => {
+      console.log("Locations:", data);
+
+      setLocations(data);
+
+      console.log("Closing Modal");
+
+      setProvinceModalVisible(false);
+    })
+    .catch((err) => {
+      console.log("ERROR:", err);
+    });
+};
 
 const analyze = () => {
   Keyboard.dismiss();
@@ -201,6 +258,7 @@ if (!fieldArea) {
     setResult([]);
     setSoilTypes([]);      
     setFieldArea("");
+    setProvinceModalVisible(true);
 
     fetch(`${BASE_URL}/locations`)
       .then((res) => res.json())
@@ -221,6 +279,82 @@ if (!fieldArea) {
     style={{ flex: 1 }}
     behavior={Platform.OS === "ios" ? "padding" : "height"}
   >
+    <Modal
+      visible={provinceModalVisible}
+      transparent={true}
+      animationType="slide"
+      statusBarTranslucent={true}
+      onRequestClose={() => {}}
+    >
+      <TouchableWithoutFeedback
+        onPress={() => {
+          setProvinceModalVisible(false);
+          setProvinceDismissed(true);
+        }}
+      >
+        <View style={styles.modalOverlay}>
+          <TouchableWithoutFeedback onPress={() => {}}>
+            <View style={styles.provinceModalCard}>
+                
+                
+                <Text style={styles.provinceIcon}>📍</Text>
+          
+               <Text
+                style={[
+                  styles.provinceModalTitle,
+                  i18n.language === "ur" && styles.provinceModalTitleUrdu,
+                ]}
+              >
+                {t("selectProvince")}
+              </Text>
+              
+              <Text
+                style={[
+                  styles.provinceModalSubtitle,
+                  i18n.language === "ur" && styles.provinceModalSubtitleUrdu,
+                ]}
+              >
+                {t("selectProvinceSubtitle")}
+              </Text>
+          
+                {provinces.map((item) => (
+                  <TouchableOpacity
+                    key={item.zone_id}
+                    style={[
+                      styles.provinceOption,
+                      i18n.language === "ur" && styles.provinceOptionUrdu,
+                    ]}
+                    onPress={() => selectProvince(item)}
+                  >
+                    <Text
+                      style={[
+                        styles.provinceOptionText,
+                        i18n.language === "ur" && styles.provinceOptionTextUrdu,
+                      ]}
+                    >
+                      {i18n.language === "ur"
+                        ? t(item.zone_name, {
+                            defaultValue: item.zone_name,
+                          })
+                        : item.zone_name}
+                    </Text>
+                
+                    <Feather
+                      name={
+                        i18n.language === "ur"
+                          ? "chevron-left"
+                          : "chevron-right"
+                      }
+                      size={20}
+                      color="#0b7a36"
+                    />
+                  </TouchableOpacity>
+                ))}
+             </View>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+     </Modal>
     <ScrollView
       ref={scrollRef}
       style={styles.container}
@@ -253,6 +387,7 @@ if (!fieldArea) {
         {t("subtitle")}
       </Text>
       <View style={styles.card}>
+      
       <Text
         style={[
           styles.heading,
@@ -276,6 +411,7 @@ if (!fieldArea) {
                 location === item.sub_zone_name && styles.activeChip,
               ]}
               onPress={() => {
+                if (!checkProvince()) return;
 
                 setLocation(item.sub_zone_name);
 
@@ -284,6 +420,7 @@ if (!fieldArea) {
                   .then((data) => {
 
                     setSoilTypes(data);
+                    setSoilType("");
 
                     // previous selected soil clear
                     setSoilType("");
@@ -331,7 +468,10 @@ if (!fieldArea) {
                 styles.chip,
                 soilType === item.soil_type && styles.activeChip,
               ]}
-              onPress={() => setSoilType(item.soil_type)}
+              onPress={() => {
+                if (!checkProvince()) return;
+                setSoilType(item.soil_type);
+              }}
             >
               <Text
                 style={[
@@ -359,17 +499,36 @@ if (!fieldArea) {
         </Text>
 
         <TextInput
-  style={[
-      styles.input,
-      i18n.language === "ur" && styles.inputUrdu,
-    ]}
-    value={fieldArea}
-    onChangeText={(text) => setFieldArea(text.replace(/[^0-9.]/g, ""))}
-    keyboardType="decimal-pad"
-    placeholder={t("areaPlaceholder")}
-    placeholderTextColor="#999"
-  />
-        <TouchableOpacity style={styles.button} onPress={analyze}>
+          style={[
+            styles.input,
+            i18n.language === "ur" && styles.inputUrdu,
+          ]}
+          value={fieldArea}
+          onFocus={(event) => {
+            if (!checkProvince()) {
+              event.currentTarget.blur();
+            }
+          }}
+          onChangeText={(text) => {
+            if (!province) {
+              setProvinceModalVisible(true);
+              return;
+            }
+        
+            setFieldArea(text.replace(/[^0-9.]/g, ""));
+          }}
+          keyboardType="decimal-pad"
+          placeholder={t("areaPlaceholder")}
+          placeholderTextColor="#999"
+        />
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            if (!checkProvince()) return;
+        
+            analyze();
+          }}
+        >
           <Text style={styles.buttonText}>{t("analyze")}</Text>
         </TouchableOpacity>
       </View>
@@ -428,9 +587,11 @@ if (!fieldArea) {
             i18n.language === "ur" && styles.cropHeaderUrdu,
           ]}
         >
-          <Text style={styles.mainCropEmoji}>
-            {getCropEmoji(item.recommended_crop)}
-          </Text>
+          <Image
+            source={getCropIcon(item.recommended_crop)}
+            style={styles.cropIcon}
+            resizeMode="contain"
+          />
 
           <View
             style={[
@@ -848,10 +1009,12 @@ if (!fieldArea) {
             />
           </View>
 
-          <Text style={styles.insightCropEmoji}>
-            {getCropEmoji(item.recommended_crop)}
-          </Text>
-        </View>
+          <Image
+            source={getCropIcon(item.recommended_crop)}
+            style={styles.insightCropImage}
+            resizeMode="contain"
+          />
+          </View>
 
         {/* Note */}
         <View
@@ -1678,6 +1841,7 @@ cropInsightHeading: {
 
 cropInsightsBox: {
   flexDirection: "row",
+  alignItems: "center",
   backgroundColor: "#fff9e9",
   borderWidth: 1,
   borderColor: "#f3dfab",
@@ -1715,13 +1879,12 @@ insightLineText: {
   color: "#222",
 },
 
-insightCropEmoji: {
+insightCropImage: {
   width: 70,
-  alignSelf: "flex-end",
-  fontSize: 55,
-  textAlign: "center",
-  marginLeft: 3,
-  marginBottom: 8,
+  height: 70,
+  resizeMode: "contain",
+  alignSelf: "center",
+  marginLeft: 8,
 },
 
 resultNote: {
@@ -1776,5 +1939,82 @@ financialValueUrdu: {
   width: "100%",
   textAlign: "right",
   writingDirection: "rtl",
+},
+modalOverlay: {
+  flex: 1,
+  backgroundColor: "rgba(0, 0, 0, 0.45)",
+  justifyContent: "flex-end",
+},
+
+provinceModalCard: {
+  backgroundColor: "#ffffff",
+  borderTopLeftRadius: 28,
+  borderTopRightRadius: 28,
+  paddingHorizontal: 20,
+  paddingTop: 24,
+  paddingBottom: 35,
+},
+
+provinceIcon: {
+  fontSize: 38,
+  textAlign: "center",
+  marginBottom: 8,
+},
+
+provinceModalTitle: {
+  fontSize: 24,
+  fontWeight: "800",
+  color: "#176b2d",
+  textAlign: "center",
+},
+
+provinceModalSubtitle: {
+  fontSize: 14,
+  color: "#666",
+  textAlign: "center",
+  marginTop: 6,
+  marginBottom: 20,
+},
+
+provinceOption: {
+  flexDirection: "row",
+  justifyContent: "space-between",
+  alignItems: "center",
+  backgroundColor: "#f1f7f1",
+  borderWidth: 1,
+  borderColor: "#d4e8d4",
+  borderRadius: 14,
+  paddingHorizontal: 16,
+  paddingVertical: 16,
+  marginBottom: 11,
+},
+
+provinceOptionText: {
+  fontSize: 16,
+  fontWeight: "700",
+  color: "#222",
+},
+cropIcon: {
+  width: 75,
+  height: 75,
+},
+provinceOptionUrdu: {
+  flexDirection: "row-reverse",
+},
+
+provinceOptionTextUrdu: {
+  textAlign: "right",
+  writingDirection: "rtl",
+},
+provinceModalTitleUrdu: {
+  textAlign: "center",
+  writingDirection: "rtl",
+  alignSelf: "stretch",
+},
+
+provinceModalSubtitleUrdu: {
+  textAlign: "center",
+  writingDirection: "rtl",
+  alignSelf: "stretch",
 },
 });

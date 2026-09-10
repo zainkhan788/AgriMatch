@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   View,
   Text,
@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   Platform,
 } from "react-native";
+import "../i18n";
+import { useTranslation } from "react-i18next";
 import { Feather } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Haptics from "expo-haptics";
@@ -14,6 +16,7 @@ import { useColors } from "@/hooks/useColors";
 import { PESTS } from "@/constants/data";
 
 export default function PestDetectionScreen() {
+  const { t, i18n } = useTranslation();
   const colors = useColors();
   const insets = useSafeAreaInsets();
   const topPad = Platform.OS === "web" ? 67 : insets.top;
@@ -21,6 +24,7 @@ export default function PestDetectionScreen() {
 
   const [selectedPest, setSelectedPest] = useState<typeof PESTS[0] | null>(null);
   const [activeFilter, setActiveFilter] = useState("All");
+  const filterScrollRef = useRef<ScrollView>(null);
 
   const styles = makeStyles(colors);
   const filters = ["All", "High", "Medium", "Critical"];
@@ -28,6 +32,23 @@ export default function PestDetectionScreen() {
   const filteredPests = activeFilter === "All"
     ? PESTS
     : PESTS.filter(p => p.severity === activeFilter);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (i18n.language === "ur") {
+        filterScrollRef.current?.scrollToEnd({
+          animated: false,
+        });
+      } else {
+        filterScrollRef.current?.scrollTo({
+          x: 0,
+          animated: false,
+        });
+      }
+    }, 100);
+  
+    return () => clearTimeout(timer);
+  }, [i18n.language]);
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
@@ -44,19 +65,82 @@ export default function PestDetectionScreen() {
       contentContainerStyle={[styles.content, { paddingBottom: bottomPad + 100 }]}
       showsVerticalScrollIndicator={false}
     >
-      <Text style={styles.title}>Pest Detection</Text>
-      <Text style={styles.subtitle}>Identify and manage common agricultural pests across Pakistan</Text>
+      <Text
+        style={[
+          styles.title,
+          i18n.language === "ur" && styles.titleUrdu,
+        ]}
+      >
+        {t("pestDetectionTitle")}
+      </Text>
+      
+      <Text
+        style={[
+          styles.subtitle,
+          i18n.language === "ur" && styles.subtitleUrdu,
+        ]}
+      >
+        {t("pestDetectionSubtitle")}
+      </Text>
 
-      <View style={styles.alertBanner}>
+      <View 
+        style={[
+          styles.alertBanner,
+          i18n.language === "ur" && styles.alertBannerUrdu 
+          ]}
+      >
         <Feather name="alert-triangle" size={16} color={colors.warning} />
-        <Text style={styles.alertText}>Early detection prevents up to 80% of crop loss. Check your fields weekly during peak season.</Text>
+        <Text 
+          style={[
+            styles.alertText,
+            i18n.language === "ur" && styles.alertTextUrdu
+          ]}
+        >
+          {t("pestEarlyDetectionAlert")}
+        </Text>
       </View>
 
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterScroll}>
+      <ScrollView
+        ref={filterScrollRef}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={styles.filterScroll}
+        contentContainerStyle={[
+          styles.filterContent,
+          i18n.language === "ur" && styles.filterContentUrdu,
+        ]}
+        onContentSizeChange={() => {
+          if (i18n.language === "ur") {
+            filterScrollRef.current?.scrollToEnd({
+              animated: false,
+            });
+          }
+        }}
+      >
         {filters.map(f => (
-          <TouchableOpacity key={f} onPress={() => setActiveFilter(f)} style={[styles.filterChip, activeFilter === f && { backgroundColor: getSeverityColor(f) }]}>
-            <Text style={[styles.filterChipText, activeFilter === f && styles.filterChipTextActive]}>
-              {f === "All" ? "All Pests" : `${f} Risk`}
+          <TouchableOpacity
+            key={f}
+            onPress={() => setActiveFilter(f)}
+            style={[
+              styles.filterChip,
+              i18n.language === "ur" && styles.filterChipUrdu,
+              activeFilter === f && {
+                backgroundColor: getSeverityColor(f),
+              },
+            ]}
+          >
+            <Text
+              style={[
+                styles.filterChipText,
+                i18n.language === "ur" && styles.filterChipTextUrdu,
+                activeFilter === f && styles.filterChipTextActive
+              ]}
+            >
+              {f === "All"
+                ? t("allPests")
+                : t("riskFilter", {
+                    severity: t(f),
+                  })}
             </Text>
           </TouchableOpacity>
         ))}
@@ -72,63 +156,251 @@ export default function PestDetectionScreen() {
           }}
           activeOpacity={0.8}
         >
-          <View style={styles.pestHeader}>
-            <View style={[styles.pestIconWrap, { backgroundColor: pest.color + "22" }]}>
+          <View
+            style={[
+              styles.pestHeader,
+              i18n.language === "ur" && styles.pestHeaderUrdu,
+            ]}
+          >
+            <View
+              style={[
+                styles.pestIconWrap,
+                { backgroundColor: pest.color + "22" },
+              ]}
+            >
               <Text style={styles.pestEmoji}>{pest.emoji}</Text>
             </View>
-            <View style={styles.pestInfo}>
-              <Text style={styles.pestName}>{pest.name}</Text>
-              <Text style={styles.pestAffected}>Affects: {pest.affected.join(", ")}</Text>
+          
+            <View
+              style={[
+                styles.pestInfo,
+                i18n.language === "ur" && styles.pestInfoUrdu,
+              ]}
+            >
+              <Text
+                style={[
+                  styles.pestName,
+                  i18n.language === "ur" && styles.pestTextUrdu,
+                ]}
+              >
+                {i18n.language === "ur"
+                  ? pest.name.ur
+                  : pest.name.en}
+              </Text>
+          
+              <Text
+                style={[
+                  styles.pestAffected,
+                  i18n.language === "ur" && styles.pestTextUrdu,
+                ]}
+              >
+                {t("affects")}:{" "}
+                {pest.affected
+                  .map((crop) =>
+                    t(crop, {
+                      defaultValue: crop,
+                    })
+                  )
+                  .join(i18n.language === "ur" ? "، " : ", ")}
+              </Text>
             </View>
-            <View style={[styles.severityBadge, { backgroundColor: getSeverityColor(pest.severity) }]}>
-              <Text style={styles.severityText}>{pest.severity}</Text>
+          
+            <View
+              style={[
+                styles.severityBadge,
+                { backgroundColor: getSeverityColor(pest.severity) },
+              ]}
+            >
+              <Text style={styles.severityText}>
+                {t(pest.severity, {
+                  defaultValue: pest.severity,
+                })}
+              </Text>
             </View>
           </View>
 
           {selectedPest?.id === pest.id && (
             <View style={styles.pestDetail}>
+          
+              {/* Identification */}
               <View style={styles.detailSection}>
-                <View style={styles.detailSectionHeader}>
-                  <Feather name="eye" size={14} color={colors.primaryMid} />
-                  <Text style={styles.detailSectionTitle}>Identification</Text>
+                <View
+                  style={[
+                    styles.detailSectionHeader,
+                    i18n.language === "ur" &&
+                      styles.detailSectionHeaderUrdu,
+                  ]}
+                >
+                  <Feather
+                    name="eye"
+                    size={14}
+                    color={colors.primaryMid}
+                  />
+          
+                  <Text
+                    style={[
+                      styles.detailSectionTitle,
+                      i18n.language === "ur" &&
+                        styles.pestTextUrdu,
+                    ]}
+                  >
+                    {t("identification")}
+                  </Text>
                 </View>
-                <Text style={styles.detailText}>{pest.description}</Text>
-              </View>
-
-              <View style={styles.divider} />
-
-              <View style={styles.detailSection}>
-                <View style={styles.detailSectionHeader}>
-                  <Feather name="tool" size={14} color={colors.warning} />
-                  <Text style={styles.detailSectionTitle}>Treatment</Text>
+          
+                  <Text
+                    style={[
+                      styles.detailText,
+                      i18n.language === "ur" &&
+                        styles.detailTextUrdu,
+                    ]}
+                  >
+                    {i18n.language === "ur"
+                      ? pest.description.ur
+                      : pest.description.en}
+                  </Text>
                 </View>
-                <Text style={styles.detailText}>{pest.treatment}</Text>
-              </View>
-
-              <View style={styles.divider} />
-
-              <View style={styles.detailSection}>
-                <View style={styles.detailSectionHeader}>
-                  <Feather name="shield" size={14} color={colors.success} />
-                  <Text style={styles.detailSectionTitle}>Prevention</Text>
+            
+                <View style={styles.divider} />
+            
+                {/* Treatment */}
+                <View style={styles.detailSection}>
+                  <View
+                    style={[
+                      styles.detailSectionHeader,
+                      i18n.language === "ur" &&
+                        styles.detailSectionHeaderUrdu,
+                    ]}
+                  >
+                    <Feather
+                      name="tool"
+                      size={14}
+                      color={colors.warning}
+                    />
+            
+                    <Text
+                      style={[
+                        styles.detailSectionTitle,
+                        i18n.language === "ur" &&
+                          styles.pestTextUrdu,
+                      ]}
+                    >
+                      {t("treatment")}
+                    </Text>
+                  </View>
+            
+                  <Text
+                    style={[
+                      styles.detailText,
+                      i18n.language === "ur" &&
+                        styles.detailTextUrdu,
+                    ]}
+                  >
+                    {i18n.language === "ur"
+                      ? pest.treatment.ur
+                      : pest.treatment.en}
+                  </Text>
                 </View>
-                <Text style={styles.detailText}>{pest.prevention}</Text>
+            
+                <View style={styles.divider} />
+            
+                {/* Prevention */}
+                <View style={styles.detailSection}>
+                  <View
+                    style={[
+                      styles.detailSectionHeader,
+                      i18n.language === "ur" &&
+                        styles.detailSectionHeaderUrdu,
+                    ]}
+                  >
+                    <Feather
+                      name="shield"
+                      size={14}
+                      color={colors.success}
+                    />
+            
+                    <Text
+                      style={[
+                        styles.detailSectionTitle,
+                        i18n.language === "ur" &&
+                          styles.pestTextUrdu,
+                      ]}
+                    >
+                      {t("prevention")}
+                    </Text>
+                  </View>
+            
+                  <Text
+                    style={[
+                      styles.detailText,
+                      i18n.language === "ur" &&
+                        styles.detailTextUrdu,
+                    ]}
+                  >
+                    {i18n.language === "ur"
+                      ? pest.prevention.ur
+                      : pest.prevention.en}
+                  </Text>
+                </View>
               </View>
-            </View>
-          )}
+            )}      
 
-          <View style={styles.pestFooter}>
+          <View
+            style={[
+              styles.pestFooter,
+              i18n.language === "ur" && styles.pestFooterUrdu,
+            ]}
+          >
             <Feather name={selectedPest?.id === pest.id ? "chevron-up" : "chevron-down"} size={16} color={colors.textLight} />
-            <Text style={styles.tapText}>{selectedPest?.id === pest.id ? "Tap to collapse" : "Tap for details & treatment"}</Text>
+            <Text
+              style={[
+                styles.tapText,
+                i18n.language === "ur" && styles.pestTextUrdu,
+              ]}
+            >
+              {selectedPest?.id === pest.id
+                ? t("tapToCollapse")
+                : t("tapForDetails")}
+            </Text>
           </View>
         </TouchableOpacity>
       ))}
 
-      <View style={styles.reportSection}>
-        <Feather name="map-pin" size={20} color={colors.primaryMid} />
-        <View style={styles.reportText}>
-          <Text style={styles.reportTitle}>Report a Pest Sighting</Text>
-          <Text style={styles.reportDesc}>Help other farmers by reporting pest activity in your area through the Submit Data section.</Text>
+      <View
+        style={[
+          styles.reportSection,
+          i18n.language === "ur" && styles.reportSectionUrdu,
+        ]}
+      >
+        <Feather
+          name="map-pin"
+          size={22}
+          color={colors.primaryMid}
+        />
+      
+        <View
+          style={[
+            styles.reportText,
+            i18n.language === "ur" && styles.reportTextUrdu,
+          ]}
+        >
+          <Text
+            style={[
+              styles.reportTitle,
+              i18n.language === "ur" && styles.reportTitleUrdu,
+            ]}
+          >
+            {t("reportPestSighting")}
+          </Text>
+      
+          <Text
+            style={[
+              styles.reportDesc,
+              i18n.language === "ur" && styles.reportDescUrdu,
+            ]}
+          >
+            {t("reportPestDescription")}
+          </Text>
         </View>
       </View>
     </ScrollView>
@@ -144,7 +416,7 @@ function makeStyles(colors: ReturnType<typeof useColors>) {
     alertBanner: { flexDirection: "row", alignItems: "flex-start", gap: 10, backgroundColor: "#FFF8F0", borderRadius: 12, padding: 14, marginBottom: 16, borderLeftWidth: 3, borderLeftColor: colors.warning },
     alertText: { flex: 1, fontSize: 13, color: colors.soilMid, fontFamily: "Inter_400Regular", lineHeight: 18 },
     filterScroll: { marginBottom: 16 },
-    filterChip: { backgroundColor: colors.primaryGhost, paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20, marginRight: 8, borderWidth: 1.5, borderColor: "transparent" },
+    filterChip: { backgroundColor: colors.primaryGhost, paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20, borderWidth: 1.5, borderColor: "transparent" },
     filterChipText: { fontSize: 13, color: colors.textMid, fontFamily: "Inter_500Medium" },
     filterChipTextActive: { color: "#fff", fontFamily: "Inter_600SemiBold" },
     pestCard: { backgroundColor: colors.card, borderRadius: 16, padding: 16, marginBottom: 12, shadowColor: "#000", shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.06, shadowRadius: 8, elevation: 2, borderWidth: 1.5, borderColor: "transparent" },
@@ -169,5 +441,98 @@ function makeStyles(colors: ReturnType<typeof useColors>) {
     reportText: { flex: 1 },
     reportTitle: { fontSize: 15, fontWeight: "700", color: colors.primary, fontFamily: "Inter_700Bold", marginBottom: 4 },
     reportDesc: { fontSize: 13, color: colors.textMid, fontFamily: "Inter_400Regular", lineHeight: 19 },
+    titleUrdu: {
+      textAlign: "right",
+      writingDirection: "rtl",
+      lineHeight: 42,
+    },
+    
+    subtitleUrdu: {
+      textAlign: "right",
+      writingDirection: "rtl",
+      lineHeight: 28,
+    },
+    
+    alertBannerUrdu: {
+      flexDirection: "row-reverse",
+      borderLeftWidth: 0,
+      borderRightWidth: 3,
+      borderRightColor: colors.warning,
+    },
+    
+    alertTextUrdu: {
+      textAlign: "right",
+      writingDirection: "rtl",
+      lineHeight: 28,
+    },
+    filterContent: {
+      flexDirection: "row",
+      gap: 8,
+      paddingRight: 10,
+    },
+    
+    filterContentUrdu: {
+      flexDirection: "row-reverse",
+      paddingLeft: 10,
+      paddingRight: 0,
+    },
+    
+    filterChipUrdu: {
+      minWidth: 120,
+    },
+    
+    filterChipTextUrdu: {
+      textAlign: "center",
+      writingDirection: "rtl",
+    },
+    pestHeaderUrdu: {
+      flexDirection: "row-reverse",
+    },
+    
+    pestInfoUrdu: {
+      alignItems: "flex-end",
+    },
+    
+    pestTextUrdu: {
+      textAlign: "right",
+      writingDirection: "rtl",
+    },
+    
+    pestFooterUrdu: {
+      flexDirection: "row-reverse",
+      justifyContent: "flex-start",
+    },
+    detailSectionHeaderUrdu: {
+    flexDirection: "row-reverse",
+    justifyContent: "flex-start",
+  },
+  
+  detailTextUrdu: {
+    textAlign: "right",
+    writingDirection: "rtl",
+    lineHeight: 24,
+  },
+  reportSectionUrdu: {
+  flexDirection: "row-reverse",
+  alignItems: "flex-start",
+  },
+  
+  reportTextUrdu: {
+    alignItems: "flex-end",
+  },
+  
+  reportTitleUrdu: {
+    width: "100%",
+    textAlign: "right",
+    writingDirection: "rtl",
+    lineHeight: 28,
+  },
+  
+  reportDescUrdu: {
+    width: "100%",
+    textAlign: "right",
+    writingDirection: "rtl",
+    lineHeight: 26,
+  },
   });
 }
